@@ -54,4 +54,31 @@ class MemberRepositoryTest {
         // then: 조회된 회원의 ID가 3인지 검증합니다.
         assertThat(member.getId()).isEqualTo(3);
     }
+
+    // 새로운 회원을 저장한 후 정상적으로 저장되었는지 검증하는 테스트입니다.
+    @Test
+    void saveMember(){
+        // given: 새로운 회원 객체를 생성합니다.
+        Member member = new Member(1L, "A");
+
+        // when: 회원을 저장합니다.
+        memberRepository.save(member);
+
+        // then: 저장된 회원의 이름이 "A"인지 검증합니다.
+        assertThat(memberRepository.findById(1L).get().getName()).isEqualTo("A");
+    }
+
+    // 여러 회원을 저장한 후 정상적으로 저장되었는지 검증하는 테스트입니다.
+    @Test
+    void saveMembers(){
+        // given: 두 명의 회원 객체를 생성합니다.
+        List<Member> members = List.of(new Member(2L, "B"), new Member(3L, "C"));
+
+        // when: 회원 목록을 저장합니다.
+        memberRepository.saveAll(members);
+
+        // then: 저장된 회원 수가 2명인지 검증합니다.
+        assertThat(memberRepository.findAll().size()).isEqualTo(2);
+    }
+
 }
