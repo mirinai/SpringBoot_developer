@@ -82,33 +82,46 @@ class MemberRepositoryTest {
         assertThat(memberRepository.findAll().size()).isEqualTo(2);
     }
 
+    // 특정 ID의 회원을 삭제하고 정상적으로 삭제되었는지 검증하는 테스트입니다.
     @Sql("/insert-members.sql")
     @Test
     void deleteMemberById(){
-
-        // when
+        // when: ID가 2인 회원을 삭제합니다.
         memberRepository.deleteById(2L);
 
-        // then
+        // then: 삭제된 회원이 존재하지 않는지 검증합니다.
         assertThat(memberRepository.findById(2L).isEmpty()).isTrue();
     }
 
+    // 모든 회원을 삭제하고 데이터가 없는지 검증하는 테스트입니다.
     @Sql("/insert-members.sql")
     @Test
     void deleteAll(){
-
-        // when
+        // when: 모든 회원을 삭제합니다.
         memberRepository.deleteAll();
 
-        // then
+        // then: 저장된 회원 수가 0인지 검증합니다.
         assertThat(memberRepository.findAll().size()).isZero();
     }
 
+    // 특정 회원의 이름을 변경하고 정상적으로 업데이트되었는지 검증하는 테스트입니다.
+    @Sql("/insert-members.sql")
+    @Test
+    void update(){
+        // given: ID가 2인 회원을 조회합니다.
+        Member member = memberRepository.findById(2L).get();
+
+        // when: 회원의 이름을 "BC"로 변경합니다.
+        member.changeName("BC");
+
+        // then: 변경된 이름이 정상적으로 반영되었는지 검증합니다.
+        assertThat(memberRepository.findById(2L).get().getName()).isEqualTo("BC");
+    }
+
+    // 각 테스트가 끝난 후 데이터베이스를 정리하기 위해 실행되는 메서드입니다.
     @AfterEach
     public void cleanUp(){
         memberRepository.deleteAll();
     }
-
-
 
 }

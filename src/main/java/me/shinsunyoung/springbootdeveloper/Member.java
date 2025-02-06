@@ -43,5 +43,10 @@ public class Member {
 
     private String name;
     // 회원의 이름
+
+    public void changeName(String name){
+        // 회원의 이름을 변경하는 메서드
+        this.name = name;
+    }
 }
 
