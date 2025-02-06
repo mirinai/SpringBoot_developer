@@ -1,5 +1,6 @@
 package me.shinsunyoung.springbootdeveloper;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +81,34 @@ class MemberRepositoryTest {
         // then: 저장된 회원 수가 2명인지 검증합니다.
         assertThat(memberRepository.findAll().size()).isEqualTo(2);
     }
+
+    @Sql("/insert-members.sql")
+    @Test
+    void deleteMemberById(){
+
+        // when
+        memberRepository.deleteById(2L);
+
+        // then
+        assertThat(memberRepository.findById(2L).isEmpty()).isTrue();
+    }
+
+    @Sql("/insert-members.sql")
+    @Test
+    void deleteAll(){
+
+        // when
+        memberRepository.deleteAll();
+
+        // then
+        assertThat(memberRepository.findAll().size()).isZero();
+    }
+
+    @AfterEach
+    public void cleanUp(){
+        memberRepository.deleteAll();
+    }
+
+
 
 }
